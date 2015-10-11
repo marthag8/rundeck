@@ -1,3 +1,15 @@
+
+##  2.0.10
+* separated out apache, java, and rundeck server install, so you can install your own flavors
+* created grails variables so there more control over listening port
+
+## 2.0.7
+* Using attributes for databag items
+* Bug fixes
+
+## 2.0.6 
+* updating to rundeck version 2.4.2-1 GA
+
 ## 2.0.5 
 * added more options for LDAP configurations
 * improved the install process for the package option

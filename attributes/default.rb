@@ -2,24 +2,29 @@ default['rundeck'] = {}
 default['rundeck']['configdir'] = '/etc/rundeck'
 default['rundeck']['basedir'] = '/var/lib/rundeck'
 default['rundeck']['datadir'] = '/var/rundeck'
-default['rundeck']['deb']['package'] = 'rundeck-2.3.2-1-GA.deb'
+default['rundeck']['deb']['package'] = 'rundeck-2.4.2-1-GA.deb'
 default['rundeck']['deb']['options'] = false #--force-confdef --force-confold
+default['rundeck']['rpm']['version'] = '2.5.3-1.10.GA' # rundeck package from http://dl.bintray.com/rundeck/rundeck-rpm
 default['rundeck']['url'] = "http://download.rundeck.org/deb/#{node['rundeck']['deb']['package']}"
-default['rundeck']['checksum'] = '812ee51372659659715767ac923bd2a664d84fc2'
+default['rundeck']['checksum'] = 'd2038440542b64921449e4ea0d7899f723bb29a58d713532fb8a0ab434ddac89'
 default['rundeck']['port'] = 4440
 default['rundeck']['jaas'] = 'internal'
 default['rundeck']['default_role'] = 'user'
 default['rundeck']['hostname'] = "rundeck.#{node['domain']}"
+
 default['rundeck']['email'] = "rundeck@#{node['domain']}"
 default['rundeck']['restart_on_config_change'] = false
 default['rundeck']['log_dir'] = '/var/log/chef-rundeck'
+default['rundeck']['tokens_file'] = nil # e.g. '/etc/rundeck/tokens.properties'
 
 # web server configuration
 default['rundeck']['apache-template']['cookbook'] = 'rundeck'
 default['rundeck']['use_ssl'] = false
 default['rundeck']['cert']['name'] = node['rundeck']['hostname']
 default['rundeck']['cert']['cookbook'] = 'rundeck'
-default['rundeck']['server_url'] = "#{node['rundeck']['use_ssl'] ? 'https' : 'http'}://#{node['rundeck']['hostname']}"
+default['rundeck']['webcontext'] = '/'
+default['rundeck']['grails_server_url'] = "#{node['rundeck']['use_ssl'] ? 'https' : 'http'}://#{node['rundeck']['hostname']}"
+default['rundeck']['grails_port'] = node['rundeck']['use_ssl'] ? 443 : 80 
 
 default['rundeck']['log_level'] = 'DEBUG' # ERR,WARN,INFO,VERBOSE,DEBUG
 default['rundeck']['rss_enabled'] = true
@@ -31,6 +36,7 @@ default['rundeck']['session_timeout'] = 30
 default['rundeck']['rundeck_databag_secure'] = 'secure'
 default['rundeck']['rundeck_databag'] = 'rundeck'
 default['rundeck']['rundeck_projects_databag'] = 'rundeck_projects'
+default['rundeck']['rundeck_databag_users'] = 'users'
 
 # chef-rundeck
 if node['platform'] == 'ubuntu' || node['platform_family'] == 'rhel'
@@ -52,7 +58,8 @@ default['rundeck']['chef_client_name'] = 'chef-rundeck'
 default['rundeck']['chef_rundeck_url'] = "http://chef.#{node['domain']}:#{node['rundeck']['chef_rundeck_port']}"
 default['rundeck']['chef_webui_url'] = "https://chef.#{node['domain']}"
 default['rundeck']['chef_url'] = "https://chef.#{node['domain']}"
-default['rundeck']['project_config'] = '/etc/chef/chef-rundeck.json'
+default['rundeck']['chef_configdir'] = "/etc/chef"
+default['rundeck']['project_config'] = "#{node['rundeck']['chef_configdir']}/chef-rundeck.json"
 
 # SMTP settings for rundeck notification emails
 default['rundeck']['mail']['enable'] = false
@@ -107,3 +114,6 @@ default['rundeck']['ldap']['roleprefix'] = 'rundeck-'
 default['rundeck']['ldap']['cachedurationmillis'] = '300000'
 default['rundeck']['ldap']['reportstatistics'] = 'true'
 default['rundeck']['ldap']['supplementalroles'] = node['rundeck']['default_role']
+
+# Plugins
+default['rundeck']['plugin']['slack'] = 'https://github.com/higanworks/rundeck-slack-incoming-webhook-plugin/releases/download/v0.3.dev/rundeck-slack-incoming-webhook-plugin-0.3.jar'
